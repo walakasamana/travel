@@ -60,27 +60,27 @@ export default function AirportRouteStrip({ routes, loading, error, limit = 6 })
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wider text-primary">
-                      <span className="icon-chip h-9 w-9 rounded-xl"><PlaneTakeoff size={15} /></span>
+                      <span className="icon-chip h-9 w-9 rounded-xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"><PlaneTakeoff size={15} /></span>
                       {r.airport_code || bi("Transfer", "Transfer", lang)}
                     </span>
                     {durationLabel(r.duration_minutes, lang) ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/80 px-2.5 py-1 text-[11.5px] font-medium text-secondary-foreground">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/80 px-2.5 py-1 text-[11.5px] font-medium text-secondary-foreground transition-colors duration-300 group-hover:border-ring/40">
                         <Clock size={12} /> {durationLabel(r.duration_minutes, lang)}
                       </span>
                     ) : null}
                   </div>
                   <p className="mt-3 flex flex-wrap items-center gap-1.5 text-[14.5px] font-semibold text-foreground">
-                    {r.from_label} <MoveRight size={15} className="text-muted-foreground" /> {r.to_label}
+                    {r.from_label} <MoveRight size={15} className="text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary" /> {r.to_label}
                   </p>
                   <div className="hairline mt-4" aria-hidden="true" />
                   <div className="mt-3 flex items-end justify-between gap-3">
                     <div>
                       <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{bi("Tarif flat", "Flat rate", lang)}</p>
-                      <p className="font-mono text-[19px] font-semibold tabular-nums text-foreground" data-testid={`ars-price-${r.code}`}>
+                      <p className="font-mono text-[19px] font-semibold tabular-nums text-foreground transition-colors duration-300 group-hover:text-primary" data-testid={`ars-price-${r.code}`}>
                         {r.from_price ? formatCurrency(r.from_price) : bi("Hubungi kami", "Contact us", lang)}
                       </p>
                     </div>
-                    <span className="cta-shine mb-0.5 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-md" style={{ background: "var(--gradient-cta)" }}>
+                    <span className="cta-shine mb-0.5 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-md transition-transform duration-300 group-hover:scale-[1.07]" style={{ background: "var(--gradient-cta)" }}>
                       {bi("Pesan", "Book", lang)} <ArrowRight size={13} className="transition group-hover:translate-x-1" />
                     </span>
                   </div>

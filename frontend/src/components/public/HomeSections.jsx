@@ -54,10 +54,11 @@ function defaultFaqs(lang) {
 
 function Stars({ n = 5 }) {
   return (
-    <span className="inline-flex gap-0.5">
+    <span className="inline-flex items-center gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} size={15} className={i < n ? "fill-[hsl(var(--ring))] text-[hsl(var(--ring))]" : "text-border"} />
+        <Star key={i} size={16} className={i < n ? "fill-amber-400 text-amber-400 drop-shadow-[0_1px_2px_rgba(245,158,11,0.35)]" : "text-border"} />
       ))}
+      <span className="ml-1.5 font-mono text-[12px] font-semibold tabular-nums text-muted-foreground">{n}.0</span>
     </span>
   );
 }
@@ -216,8 +217,14 @@ function TestimonialsSection({ lang, d, dyn }) {
                 <Quote className="absolute right-6 top-6 h-8 w-8 text-[hsl(var(--ring))] opacity-25" />
                 <Stars n={t.rating || 5} />
                 <p className="mt-4 text-[14.5px] leading-relaxed text-foreground/90">&ldquo;{t.quote}&rdquo;</p>
-                <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <div className="h-11 w-11 rounded-full bg-secondary bg-cover bg-center ring-2 ring-[hsla(var(--glass-border))]" style={t.avatar ? { backgroundImage: `url('${t.avatar}')` } : undefined} />
+                <div className="mt-5 flex items-center gap-3.5 border-t border-border pt-4">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-secondary ring-2 ring-[hsl(var(--ring))]/35 ring-offset-2 ring-offset-card">
+                    {t.avatar ? (
+                      <img src={t.avatar} alt={t.name} loading="lazy" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center text-[15px] font-bold text-muted-foreground">{String(t.name || "?").slice(0, 1)}</span>
+                    )}
+                  </div>
                   <div><p className="text-[13.5px] font-semibold text-foreground">{t.name}</p><p className="text-[12px] text-muted-foreground">{t.role}</p></div>
                 </div>
               </GlassCard>
