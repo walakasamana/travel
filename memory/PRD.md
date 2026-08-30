@@ -262,3 +262,13 @@ Implementasi tipe blok BARU **`route_grid` ("Rute Antar-Jemput")**:
    SpecsEditor baru (components/cms/SpecsEditor.jsx — baris label+nilai, key auto-slug) di samping
    keunggulan/foto/galeri/tur/eksterior/syarat yang sudah ada. Round-trip PATCH specs+features
    diverifikasi via curl (200, tampil di /api/public/fleet, data demo direstore).
+
+## Sesi 2026-08-30 (lanjutan 5) — Anti-flat seluruh section publik
+- Upgrade utility bersama di index.css (mengangkat SEMUA section sekaligus):
+  `--glass-shadow` 0.10→0.16; `--shadow-glass-3d` + lapisan contact shadow & glow aksen;
+  `.card-premium::after` kilau aksen sudut atas (radial, pointer-events none);
+  `.section-tint` + radial glow atas, border-y hairline, inset highlight (varian dark aman).
+- `AirportRouteStrip`: icon-chip gradien + chip durasi di header, hairline pemisah,
+  harga lebih besar, CTA "Pesan" jadi tombol pil gradien (cta-shine).
+- Verifikasi screenshot: /fleet (rute bandara + promo) & beranda (3 langkah booking) —
+  kartu berdimensi, teks tetap terbaca, dark-mode token disesuaikan.
