@@ -249,3 +249,16 @@ Implementasi tipe blok BARU **`route_grid` ("Rute Antar-Jemput")**:
   (hilang saat restore repo).
 - Catatan: frame eksterior & panorama interior di seed adalah PLACEHOLDER demo (mobil sport AMG /
   foto wisata) — ganti via CMS Armada → Konten Web dgn foto asli unit.
+
+## Sesi 2026-08-30 (lanjutan 4) — Feedback UI detail armada (3 poin user)
+1. Komposisi kiri-kanan seimbang: galeri kiri sticky (lg:sticky top-24); elemen kanan diberi depth —
+   kartu harga bergradien accent + glow + shadow, tab pill (rounded-full, shadow aktif), fasilitas
+   2 kolom dgn badge check bergradien, kartu penawaran ber-glow blob.
+2. Eksterior 360° FRAMELESS: tanpa border/kartu/counter/label jumlah frame; gambar lebih besar
+   (h-560px, drop-shadow) — siap utk PNG transparan; cue "Swipe untuk memutar" (ikon Hand + chevron
+   pulse) sampai interaksi pertama; kontrol minimal (prev/play/next + slider tanpa angka);
+   interaksi aktif setelah 6 frame awal termuat (progressive).
+3. CMS lengkap: VehicleFormDialog kini punya editor Fasilitas Unit (features, textarea 1/baris) dan
+   SpecsEditor baru (components/cms/SpecsEditor.jsx — baris label+nilai, key auto-slug) di samping
+   keunggulan/foto/galeri/tur/eksterior/syarat yang sudah ada. Round-trip PATCH specs+features
+   diverifikasi via curl (200, tampil di /api/public/fleet, data demo direstore).

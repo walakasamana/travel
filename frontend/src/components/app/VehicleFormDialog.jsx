@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import GalleryManager from "@/components/cms/GalleryManager";
 import TourSceneBuilder from "@/components/cms/TourSceneBuilder";
 import ExteriorFramesEditor from "@/components/cms/ExteriorFramesEditor";
+import SpecsEditor from "@/components/cms/SpecsEditor";
 
 const TYPES = [
   { v: "hiace_premio", l: "Hiace Premio" }, { v: "hiace", l: "Hiace Commuter" },
@@ -32,7 +33,7 @@ const EMPTY = {
   name: "", plate_number: "", type: "hiace_premio", capacity: "", status: "available",
   kir_expiry: "", tax_expiry: "", next_service_date: "", odometer: "", notes: "",
   price_from: "", day_rate: "", publish_to_web: true, year: "", color: "", highlights: "", photos: [], gallery: [], tour_scenes: [],
-  exterior_frames: [], rental_terms: "",
+  exterior_frames: [], rental_terms: "", features: "", specs: [],
   ownership: "owned", partner_id: "",
 };
 // RC-B (INV-PRICE-02): `price_from`/`day_rate` tinggal READ-ONLY di sini — jalur tulisnya
@@ -66,6 +67,8 @@ export default function VehicleFormDialog({ open, onOpenChange, initial, onSaved
         tour_scenes: Array.isArray(initial.tour_scenes) ? initial.tour_scenes : [],
         exterior_frames: Array.isArray(initial.exterior_frames) ? initial.exterior_frames : [],
         rental_terms: Array.isArray(initial.rental_terms) ? initial.rental_terms.join("\n") : "",
+        features: Array.isArray(initial.features) ? initial.features.join("\n") : "",
+        specs: Array.isArray(initial.specs) ? initial.specs : [],
       };
       setForm({
         name: initial.name || "", plate_number: initial.plate_number || "",
@@ -105,6 +108,8 @@ export default function VehicleFormDialog({ open, onOpenChange, initial, onSaved
       tour_scenes: Array.isArray(form.tour_scenes) ? form.tour_scenes : [],
       exterior_frames: Array.isArray(form.exterior_frames) ? form.exterior_frames.map((u) => (typeof u === "string" ? u : u?.url || "")).filter(Boolean) : [],
       rental_terms: String(form.rental_terms || "").split("\n").map((s) => s.trim()).filter(Boolean),
+      features: String(form.features || "").split("\n").map((s) => s.trim()).filter(Boolean),
+      specs: (Array.isArray(form.specs) ? form.specs : []).filter((r) => (r.label || "").trim() && (r.value || "").trim()),
     };
     try {
       if (editing) await apiClient.patch(`/vehicles/${initial.id}`, payload);
@@ -248,6 +253,14 @@ export default function VehicleFormDialog({ open, onOpenChange, initial, onSaved
                 <div className="space-y-1.5">
                   <Label>Keunggulan (1 per baris)</Label>
                   <Textarea value={form.highlights} onChange={(e) => set("highlights", e.target.value)} placeholder={"AC Double Blower\nKursi Reclining\nWifi & USB"} data-testid="vf-highlights" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Fasilitas Unit (1 per baris — tab Fasilitas di web)</Label>
+                  <Textarea value={form.features} onChange={(e) => set("features", e.target.value)} placeholder={"Full AC\nKursi Reclining\nWifi Unlimited\nKaraoke & TV Roof"} data-testid="vf-features" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Spesifikasi (label &amp; nilai — section Spesifikasi di web)</Label>
+                  <SpecsEditor value={form.specs} onChange={(arr) => set("specs", arr)} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Foto Utama (cover di urutan pertama)</Label>

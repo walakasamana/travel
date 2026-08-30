@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Pause, Play, Move } from "lucide-react";
+import { ChevronLeft, ChevronRight, Hand, Loader2, Pause, Play } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useLangValue } from "@/hooks/useLang";
 import { bi } from "@/lib/i18n";
@@ -10,7 +10,6 @@ export default function Exterior360({ frames = [], alt = "" }) {
   const lang = useLangValue();
   const n = frames.length;
   const [idx, setIdx] = useState(0);
-  const [loaded, setLoaded] = useState(0);
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -24,7 +23,7 @@ export default function Exterior360({ frames = [], alt = "" }) {
     let count = 0;
     frames.forEach((src) => {
       const img = new Image();
-      img.onload = () => { if (!alive) return; count += 1; setLoaded(count); if (count >= Math.min(n, 6)) setReady(true); };
+      img.onload = () => { if (!alive) return; count += 1; if (count >= Math.min(n, 6)) setReady(true); };
       img.onerror = img.onload;
       img.src = src;
     });
@@ -54,7 +53,6 @@ export default function Exterior360({ frames = [], alt = "" }) {
   const onPointerUp = () => { drag.current.active = false; setDragging(false); };
 
   if (n < 2) return null;
-  const pct = Math.round((loaded / n) * 100);
 
   return (
     <div data-testid="ext360-viewer">
@@ -65,34 +63,33 @@ export default function Exterior360({ frames = [], alt = "" }) {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         data-testid="ext360-stage"
-        className={`relative touch-pan-y select-none overflow-hidden rounded-2xl border border-border bg-card shadow-sm ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
-        style={{ background: "radial-gradient(ellipse 70% 60% at 50% 42%, hsl(var(--secondary)) 0%, hsl(var(--card)) 70%)" }}
+        className={`relative touch-pan-y select-none ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
       >
         <img
           src={frames[idx]}
-          alt={`${alt} 360° frame ${idx + 1}`}
+          alt={`${alt} 360°`}
           draggable={false}
-          className="pointer-events-none mx-auto h-[280px] w-full object-contain sm:h-[420px]"
+          className="pointer-events-none mx-auto h-[340px] w-full object-contain drop-shadow-2xl sm:h-[500px] lg:h-[560px]"
         />
-        <span className="absolute right-3 top-3 rounded-full border border-border bg-card/85 px-2.5 py-1 font-mono text-[11px] tabular-nums text-muted-foreground backdrop-blur-sm" data-testid="ext360-counter">
-          {idx + 1} / {n}
-        </span>
         {!interacted && ready ? (
-          <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-primary/85 px-4 py-1.5 text-[12px] font-medium text-primary-foreground backdrop-blur-sm">
-            <Move size={13} /> {bi("← Geser untuk memutar →", "← Drag to rotate →", lang)}
-          </span>
+          <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-3">
+            <ChevronLeft size={20} className="animate-pulse text-muted-foreground" />
+            <span className="flex items-center gap-2 rounded-full bg-primary/90 px-5 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-lg backdrop-blur-sm">
+              <Hand size={14} className="animate-pulse" /> {bi("Swipe untuk memutar", "Swipe to rotate", lang)}
+            </span>
+            <ChevronRight size={20} className="animate-pulse text-muted-foreground" />
+          </div>
         ) : null}
         {!ready ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-card/70 backdrop-blur-sm" data-testid="ext360-loading">
-            <p className="text-[12.5px] text-muted-foreground">{bi(`Memuat ${n} frame… ${pct}%`, `Loading ${n} frames… ${pct}%`, lang)}</p>
-            <div className="h-1.5 w-44 overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full transition-[width] duration-200" style={{ width: `${pct}%`, background: "var(--gradient-cta)" }} />
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center" data-testid="ext360-loading">
+            <span className="flex items-center gap-2 rounded-full bg-card/80 px-4 py-2 text-[12.5px] text-muted-foreground shadow-sm backdrop-blur-sm">
+              <Loader2 size={14} className="animate-spin" /> {bi("Memuat 360°…", "Loading 360°…", lang)}
+            </span>
           </div>
         ) : null}
       </div>
 
-      <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-card px-3 py-2.5 shadow-sm sm:px-4">
+      <div className="mx-auto mt-3 flex max-w-md items-center gap-3 px-2">
         <div className="flex items-center gap-1.5">
           <button type="button" onClick={() => step(-1)} data-testid="ext360-prev" aria-label={bi("Putar kiri", "Rotate left", lang)}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:-translate-y-0.5 hover:text-foreground">
@@ -117,7 +114,6 @@ export default function Exterior360({ frames = [], alt = "" }) {
           className="flex-1"
           data-testid="ext360-slider"
         />
-        <span className="hidden font-mono text-[11px] tabular-nums text-muted-foreground sm:block">{n} {bi("frame", "frames", lang)}</span>
       </div>
     </div>
   );

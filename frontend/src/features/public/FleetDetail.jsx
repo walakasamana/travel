@@ -137,7 +137,7 @@ export default function FleetDetail() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.2fr_1fr]">
           {/* Galeri */}
-          <GlassCard className="h-fit p-4">
+          <GlassCard className="h-fit p-4 lg:sticky lg:top-24">
             {gallery.length === 0 ? (
               <p className="p-4 text-[13px] text-muted-foreground" data-testid="fleet-gallery-empty">{bi("Belum ada foto untuk unit ini.", "No photos for this unit yet.", lang)}</p>
             ) : (
@@ -182,41 +182,52 @@ export default function FleetDetail() {
             </div>
 
             {v.price_from ? (
-              <div className="flex items-center gap-4 rounded-2xl border border-border bg-secondary/60 px-5 py-4" data-testid="fleet-price">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-card text-foreground shadow-sm"><Tag size={17} /></span>
-                <div>
-                  <p className="text-[11.5px] uppercase tracking-wide text-muted-foreground">{bi("Mulai dari", "Start from", lang)}</p>
-                  <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">{formatCurrency(v.price_from)}<span className="text-[13px] font-normal text-muted-foreground"> /{bi("hari", "day", lang)}</span></p>
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-card px-5 py-4 shadow-[0_18px_40px_-20px_hsla(205,60%,30%,0.45)]" data-testid="fleet-price">
+                <span className="pointer-events-none absolute inset-0" style={{ background: "var(--gradient-accent)" }} aria-hidden="true" />
+                <span className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full opacity-50 blur-2xl" style={{ background: "var(--gradient-cta)" }} aria-hidden="true" />
+                <div className="relative flex items-center gap-4">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full text-primary-foreground shadow-md" style={{ background: "var(--gradient-cta)" }}><Tag size={18} /></span>
+                  <div>
+                    <p className="text-[11.5px] uppercase tracking-[0.15em] text-muted-foreground">{bi("Mulai dari", "Start from", lang)}</p>
+                    <p className="font-mono text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">{formatCurrency(v.price_from)}<span className="text-[13px] font-normal text-muted-foreground"> /{bi("hari", "day", lang)}</span></p>
+                  </div>
                 </div>
               </div>
             ) : null}
 
             <Tabs defaultValue="facilities">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="facilities" data-testid="fleet-tab-facilities">{bi("Fasilitas", "Facilities", lang)}</TabsTrigger>
-                <TabsTrigger value="terms" data-testid="fleet-tab-terms">{bi("Syarat & Ketentuan", "Terms & Conditions", lang)}</TabsTrigger>
+              <TabsList className="grid h-11 w-full grid-cols-2 rounded-full border border-border bg-secondary/80 p-1 shadow-inner">
+                <TabsTrigger value="facilities" className="rounded-full data-[state=active]:shadow-md" data-testid="fleet-tab-facilities">{bi("Fasilitas", "Facilities", lang)}</TabsTrigger>
+                <TabsTrigger value="terms" className="rounded-full data-[state=active]:shadow-md" data-testid="fleet-tab-terms">{bi("Syarat & Ketentuan", "Terms & Conditions", lang)}</TabsTrigger>
               </TabsList>
-              <TabsContent value="facilities" className="rounded-xl border border-border bg-card p-4">
+              <TabsContent value="facilities" className="rounded-2xl border border-border bg-card p-4 shadow-[0_14px_34px_-22px_hsla(205,60%,30%,0.5)]">
                 {allPoints.length === 0 ? (
                   <p className="text-[13px] text-muted-foreground" data-testid="fleet-highlights-empty">{bi("Belum ada keunggulan tercatat.", "No highlights recorded yet.", lang)}</p>
                 ) : (
-                  <ul className="grid grid-cols-1 gap-2" data-testid="fleet-highlights">
+                  <ul className="grid grid-cols-1 gap-x-4 gap-y-2.5 sm:grid-cols-2" data-testid="fleet-highlights">
                     {allPoints.map((h, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[13.5px] text-foreground/90"><Check size={15} className="mt-0.5 flex-shrink-0 text-primary" /> {h}</li>
+                      <li key={i} className="flex items-start gap-2.5 text-[13.5px] text-foreground/90">
+                        <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-primary-foreground shadow-sm" style={{ background: "var(--gradient-cta)" }}><Check size={11} /></span>
+                        {h}
+                      </li>
                     ))}
                   </ul>
                 )}
               </TabsContent>
-              <TabsContent value="terms" className="rounded-xl border border-border bg-card p-4">
+              <TabsContent value="terms" className="rounded-2xl border border-border bg-card p-4 shadow-[0_14px_34px_-22px_hsla(205,60%,30%,0.5)]">
                 <ul className="grid grid-cols-1 gap-2.5" data-testid="fleet-terms">
                   {terms.map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-[13.5px] text-foreground/90"><FileText size={14} className="mt-0.5 flex-shrink-0 text-muted-foreground" /> {t}</li>
+                    <li key={i} className="flex items-start gap-2.5 text-[13.5px] text-foreground/90">
+                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground"><FileText size={11} /></span>
+                      {t}
+                    </li>
                   ))}
                 </ul>
               </TabsContent>
             </Tabs>
 
-            <GlassCard className="p-5">
+            <GlassCard className="relative overflow-hidden p-5">
+              <span className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full opacity-40 blur-2xl" style={{ background: "var(--gradient-cta)" }} aria-hidden="true" />
               <p className="font-fraunces text-lg text-foreground">{bi("Butuh Penawaran Harga?", "Need a Price Quote?", lang)}</p>
               <p className="mt-1 text-[13px] text-muted-foreground">{bi("Harga fleksibel sesuai durasi & rute perjalanan Anda — tim kami balas cepat.", "Flexible pricing based on your duration & route — our team replies fast.", lang)}</p>
               <div className="mt-4 flex flex-col gap-2">
@@ -234,8 +245,8 @@ export default function FleetDetail() {
 
       {/* EKSTERIOR 360° — frame drag + slider (jumlah frame mengikuti data unit) */}
       {extFrames.length >= 2 ? (
-        <section className="border-y border-border bg-secondary/50 py-14" data-testid="fleet-exterior-360">
-          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <section className="relative overflow-hidden py-16" style={{ background: "radial-gradient(ellipse 75% 70% at 50% 45%, hsl(var(--secondary)) 0%, hsl(var(--background)) 78%)" }} data-testid="fleet-exterior-360">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mb-7 text-center">
               <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground"><Compass size={12} /> {bi("Eksterior 360°", "Exterior 360°", lang)}</p>
               <h2 className="mt-3 font-fraunces text-3xl text-foreground sm:text-4xl">{bi("Lihat dari Segala Sudut", "View from Every Angle", lang)}</h2>
